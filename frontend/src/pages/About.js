@@ -46,7 +46,11 @@ function About() {
               <ul>
                 <li>Analyzes news headline sentiment</li>
                 <li>Classifies as Positive, Neutral, or Negative</li>
-                <li>Provides compound sentiment scores</li>
+                <li>Provides compound sentiment scores (-1 to +1)</li>
+                <li>
+                  <strong>Score Normalization:</strong> The compound score is converted to a 0-100 scale using the formula: 
+                  <code> (Compound Score + 1) * 50 </code>. This properly maps negative sentiment to lower scores and positive to higher scores.
+                </li>
               </ul>
             </li>
           </ul>

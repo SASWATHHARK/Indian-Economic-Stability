@@ -26,7 +26,16 @@ function Forecast() {
   };
 
   if (loading) {
-    return <div className="loading">Generating forecast...</div>;
+    return (
+      <div className="forecast-page">
+        <div className="container">
+          <div className="loading-container">
+            <div className="spinner"></div>
+            <div className="loading-text">Generating 7-Day Market Forecast...</div>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   if (error) {
@@ -37,13 +46,15 @@ function Forecast() {
     return <div className="error">No forecast data available</div>;
   }
 
-  // Prepare chart data
-  const chartData = forecastData.forecast.map(item => ({
-    date: new Date(item.date).toLocaleDateString('en-IN', { month: 'short', day: 'numeric' }),
+  // Prepare chart data with safety checks
+  const chartData = (forecastData.forecast || []).map(item => ({
+    date: item.date ? new Date(item.date).toLocaleDateString('en-IN', { month: 'short', day: 'numeric' }) : '',
     predicted: item.predicted,
-    upper: item.upper_bound,
-    lower: item.lower_bound,
+    upper: item.upper !== undefined ? item.upper : item.upper_bound, // Handle both potential field names
+    lower: item.lower !== undefined ? item.lower : item.lower_bound,
   }));
+
+  const safeSummary = forecastData.summary || {};
 
   return (
     <div className="forecast-page">
@@ -53,8 +64,8 @@ function Forecast() {
         <div className="card">
           <h2>NIFTY 50 Forecast</h2>
           <p className="subtitle">
-            Current Value: ₹{forecastData.current_value.toLocaleString()} | 
-            Forecast Score: {forecastData.forecast_score}%
+            Current Value: ₹{forecastData.current_value?.toLocaleString() || '--'} | 
+            Forecast Score: {forecastData.forecast_score || '--'}%
           </p>
 
           <div className="chart-container">
@@ -62,14 +73,14 @@ function Forecast() {
               <LineChart data={chartData}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="date" />
-                <YAxis />
+                <YAxis domain={['auto', 'auto']} />
                 <Tooltip formatter={(value) => `₹${value.toLocaleString()}`} />
                 <Legend />
                 <Line 
                   type="monotone" 
                   dataKey="predicted" 
-                  stroke="#667eea" 
-                  strokeWidth={2}
+                  stroke="#4F46E5" 
+                  strokeWidth={3}
                   name="Predicted"
                 />
                 <Line 
@@ -95,15 +106,15 @@ function Forecast() {
             <div className="summary-grid">
               <div className="summary-item">
                 <span className="label">Trend:</span>
-                <span className="value">{forecastData.summary.trend}</span>
+                <span className="value">{safeSummary.trend || '--'}</span>
               </div>
               <div className="summary-item">
                 <span className="label">Average Confidence:</span>
-                <span className="value">{forecastData.summary.avg_confidence.toFixed(1)}%</span>
+                <span className="value">{safeSummary.avg_confidence ? safeSummary.avg_confidence.toFixed(1) : '--'}%</span>
               </div>
               <div className="summary-item">
                 <span className="label">Volatility:</span>
-                <span className="value">{forecastData.summary.volatility.toFixed(2)}</span>
+                <span className="value">{safeSummary.volatility ? safeSummary.volatility.toFixed(2) : '--'}</span>
               </div>
             </div>
           </div>
@@ -111,11 +122,10 @@ function Forecast() {
           <div className="model-info">
             <h3>Model Information</h3>
             <ul>
-              <li><strong>Model:</strong> {forecastData.model_info.model}</li>
-              <li><strong>Training Period:</strong> {forecastData.model_info.training_period}</li>
-              <li><strong>Forecast Horizon:</strong> {forecastData.model_info.forecast_horizon}</li>
+              {/* Backend returns 'model' at top level, not in model_info object */}
+              <li><strong>Model:</strong> {forecastData.model || 'Unknown'}</li>
+              <li><strong>Note:</strong> {forecastData.note || '--'}</li>
             </ul>
-            <p className="note">{forecastData.model_info.note}</p>
           </div>
         </div>
 
@@ -133,13 +143,13 @@ function Forecast() {
                 </tr>
               </thead>
               <tbody>
-                {forecastData.forecast.map((item, idx) => (
+                {(forecastData.forecast || []).map((item, idx) => (
                   <tr key={idx}>
-                    <td>{new Date(item.date).toLocaleDateString('en-IN')}</td>
-                    <td>₹{item.predicted.toLocaleString()}</td>
-                    <td>₹{item.lower_bound.toLocaleString()}</td>
-                    <td>₹{item.upper_bound.toLocaleString()}</td>
-                    <td>{item.confidence.toFixed(1)}%</td>
+                    <td>{item.date ? new Date(item.date).toLocaleDateString('en-IN') : '--'}</td>
+                    <td>₹{item.predicted?.toLocaleString() || '--'}</td>
+                    <td>₹{item.lower?.toLocaleString() || item.lower_bound?.toLocaleString() || '--'}</td>
+                    <td>₹{item.upper?.toLocaleString() || item.upper_bound?.toLocaleString() || '--'}</td>
+                    <td>{item.confidence ? item.confidence.toFixed(1) : '--'}%</td>
                   </tr>
                 ))}
               </tbody>

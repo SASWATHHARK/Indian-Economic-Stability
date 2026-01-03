@@ -1,57 +1,136 @@
-.gauge-container {
+/* Stability Gauge Component (Hero Style) */
+.stability-card {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  margin: 40px 0;
-  padding: 20px;
+  justify-content: center;
+  text-align: center;
+  /* Add subtle background pattern or gradient hint for Hero if desired, but keeping white for cleanliness */
 }
 
-.gauge {
-  width: 300px;
-  height: 300px;
+.gauge-container {
+  margin: 10px 0 20px 0;
   position: relative;
+  width: 300px; /* Larger */
+  height: 150px;
 }
 
-.gauge-circle {
+.gauge-svg {
   width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  border: 20px solid #e0e0e0;
-  border-top-color: #4caf50;
-  border-right-color: #4caf50;
-  transform: rotate(-90deg);
-  transition: all 0.5s ease;
+  height: auto;
+  overflow: visible;
+  filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
+}
+
+.gauge-overlay {
+  position: absolute;
+  bottom: 0px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .gauge-value {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 48px;
-  font-weight: bold;
-  color: #333;
-  z-index: 10;
+  font-size: 3.5rem; /* 56px */
+  font-weight: 800;
+  line-height: 1;
+  color: var(--text-main);
 }
 
-.gauge-label {
-  position: absolute;
-  bottom: -40px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 18px;
-  color: #666;
-  font-weight: 500;
+
+.gauge-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-top: 5px;
   text-transform: uppercase;
+  letter-spacing: 0.5px;
+  background: #f3f4f6;
+  color: var(--text-muted);
+}
+
+.gauge-badge.stable {
+  background: #E8F5E9; /* Light Green */
+  color: #2E7D32;
+}
+
+.gauge-badge.moderate {
+  background: #FFF8E1; /* Light Yellow */
+  color: #F57F17;
+}
+
+.gauge-badge.unstable {
+  background: #FFEBEE; /* Light Red */
+  color: #C62828;
+}
+
+.interpretation-box {
+  background: #f9fafb;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  width: 100%;
+  font-size: 0.95rem;
+  color: var(--text-dark);
+  border-left: 4px solid var(--primary-color);
+}
+
+.components-list {
+  width: 100%;
+  max-width: 800px; /* Limit width in Hero */
+  margin-top: 20px;
+  border-top: 1px solid #f3f4f6;
+  padding-top: 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr; /* Horizontal layout for desktop */
+  gap: 20px;
+}
+
+.components-list h4 {
+  display: none; /* Hide standard title, grid makes it obvious */
+}
+
+.component-item {
+  margin-bottom: 0;
+  background: #f9fafb;
+  padding: 10px;
+  border-radius: 8px;
 }
 
 @media (max-width: 768px) {
-  .gauge {
-    width: 250px;
-    height: 250px;
+  .components-list {
+    grid-template-columns: 1fr;
   }
+}
 
-  .gauge-value {
-    font-size: 36px;
-  }
+.component-label-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 4px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-dark);
+}
+
+.component-pct {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.progress-bar {
+  height: 6px;
+  background: #e5e7eb;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 1s ease-out;
 }

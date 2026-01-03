@@ -37,62 +37,45 @@
 }
 
 .summary-item .label {
-  color: #666;
+  color: var(--text-muted);
   font-weight: 500;
+  font-size: 1rem; /* Increased */
 }
 
 .summary-item .value {
-  color: #667eea;
-  font-weight: bold;
+  color: var(--brand-primary);
+  font-weight: 800;
+  font-size: 1.25rem; /* Increased from 1.1rem */
 }
 
-.model-info {
-  margin-top: 30px;
-  padding-top: 20px;
-  border-top: 1px solid #eee;
+/* ... */
+
+.forecast-table th {
+  background: #F8FAFC;
+  font-weight: 700;
+  color: var(--text-heading);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 0.95rem; /* Increased from 0.85rem */
 }
 
-.model-info ul {
-  list-style: none;
-  padding: 0;
-  margin: 15px 0;
-}
-
-.model-info li {
-  padding: 8px 0;
-  color: #666;
+.forecast-table td {
+  font-size: 1rem; /* Ensure readable data */
 }
 
 .model-info .note {
-  margin-top: 15px;
-  padding: 12px;
-  background: #e3f2fd;
-  border-left: 4px solid #2196f3;
-  color: #1976d2;
-  border-radius: 4px;
-}
-
-.forecast-table {
-  overflow-x: auto;
-  margin-top: 20px;
-}
-
-.forecast-table table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.forecast-table th,
-.forecast-table td {
-  padding: 12px;
-  text-align: left;
-  border-bottom: 1px solid #eee;
+  background: #EFF6FF; /* Light Blue/Indigo tint */
+  border-left: 4px solid var(--brand-primary);
+  color: var(--brand-secondary);
 }
 
 .forecast-table th {
-  background: #f5f5f5;
-  font-weight: 600;
-  color: #333;
+  background: #F8FAFC;
+  font-weight: 700;
+  color: var(--text-heading);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 0.85rem;
 }
 
 .forecast-table tr:hover {

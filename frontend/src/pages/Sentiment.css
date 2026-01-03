@@ -11,17 +11,31 @@
 
 .sentiment-score {
   text-align: center;
-  padding: 20px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  border-radius: 12px;
+  padding: 30px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
   min-width: 200px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.score-value {
+  font-size: 3.5rem;
+  font-weight: 800;
+  color: var(--brand-primary); /* Default color if not overriden */
+  margin-bottom: 8px;
 }
 
 .score-value {
   font-size: 48px;
-  font-weight: bold;
+  font-weight: 800;
   margin-bottom: 8px;
+}
+
+.score-unit {
+  font-size: 24px;
+  opacity: 0.7;
+  font-weight: 600;
 }
 
 .score-label {
@@ -82,8 +96,9 @@
 }
 
 .article-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transform: translateY(-4px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
 }
 
 .article-header {
@@ -107,10 +122,24 @@
 }
 
 .article-title {
-  color: #333;
-  font-size: 16px;
+  color: var(--text-heading);
+  font-size: 1.15rem; /* Increased from 16px */
   margin-bottom: 12px;
-  line-height: 1.4;
+  line-height: 1.5;
+  font-weight: 700;
+}
+
+/* ... */
+
+.stat-label {
+  color: var(--text-muted);
+  font-weight: 500;
+  font-size: 1rem;
+}
+
+.stat-value {
+  font-weight: 800;
+  font-size: 1.2rem; /* Increased from 18px */
 }
 
 .sentiment-details {

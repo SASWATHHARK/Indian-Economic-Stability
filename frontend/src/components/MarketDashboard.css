@@ -1,0 +1,133 @@
+/* Market Dashboard - Clean Black & White */
+.market-header {
+  display: block;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #111;
+  margin-bottom: 1.5rem;
+  /* Removed border pipe as requested indirectly via clean design */
+  line-height: 1.2;
+}
+
+.market-cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 24px;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .market-cards-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.market-index-card {
+  background-color: #FFFFFF !important; /* Force White */
+  border-radius: 8px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  border: 1px solid #e0e0e0;
+  transition: transform 0.2s;
+}
+
+.market-index-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+}
+
+/* Nifty/Sensex Borders */
+.market-index-card.nifty {
+  border-top: 4px solid #333; /* Dark Gray */
+}
+
+.market-index-card.sensex {
+  border-top: 4px solid #666; /* Medium Gray */
+}
+
+.index-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 15px;
+}
+
+.index-name {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Price Row */
+.price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.current-price {
+  font-size: 2.25rem;
+  font-weight: 800;
+  color: #111111;
+  line-height: 1;
+}
+
+.change {
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.change.positive {
+  color: #16A34A; /* Stock Green */
+  background: #DCFCE7; /* Light Green Bg */
+}
+
+.change.negative {
+  color: #DC2626; /* Stock Red */
+  background: #FEE2E2; /* Light Red Bg */
+}
+
+/* Metrics Grid */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.metric-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.metric-item .label {
+  font-size: 0.75rem;
+  color: #6b7280;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+
+.metric-item .val {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #111111;
+}
+
+.market-footer {
+  margin-top: 1.5rem;
+  text-align: right;
+  font-size: 0.85rem;
+  color: #9ca3af;
+}

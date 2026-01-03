@@ -22,6 +22,14 @@ function Navbar() {
           </li>
           <li>
             <Link 
+              to="/economics" 
+              className={location.pathname === '/economics' ? 'nav-link active' : 'nav-link'}
+            >
+              Economics
+            </Link>
+          </li>
+          <li>
+            <Link 
               to="/forecast" 
               className={location.pathname === '/forecast' ? 'nav-link active' : 'nav-link'}
             >

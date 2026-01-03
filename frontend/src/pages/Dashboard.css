@@ -1,95 +1,65 @@
-.dashboard {
-  padding: 20px 0;
+/* Dashboard Main Layout */
+.dashboard-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  width: 100%;
 }
 
-.page-title {
-  color: white;
+.dashboard-header {
   text-align: center;
-  font-size: 32px;
-  margin-bottom: 30px;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+  color: var(--text-main); /* Black Text */
+  margin-bottom: 3rem;
+  padding: 0 1rem;
 }
 
-.interpretation {
-  text-align: center;
-  color: #666;
-  font-size: 16px;
-  margin-top: 20px;
-  line-height: 1.6;
-  padding: 0 20px;
+.dashboard-header h1 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--text-main);
+  margin-bottom: 0.5rem;
+  /* Removed text-shadow */
 }
 
-.breakdown {
-  margin-top: 30px;
-  padding-top: 20px;
-  border-top: 1px solid #eee;
+.dashboard-header p {
+  font-size: 1.1rem;
+  color: var(--text-muted);
+  max-width: 800px;
+  margin: 0 auto;
 }
 
-.breakdown h3 {
-  margin-bottom: 15px;
-  color: #333;
-}
-
-.breakdown-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 15px;
-}
-
-.breakdown-item {
+/* Grid Layout - Vertical Flow */
+.dashboard-grid {
   display: flex;
-  justify-content: space-between;
-  padding: 12px;
-  background: #f5f5f5;
-  border-radius: 8px;
+  flex-direction: column;
+  gap: 48px; /* 40-60px spacing as requested */
+  margin-bottom: 4rem;
 }
 
-.breakdown-item .label {
-  color: #666;
-  font-weight: 500;
+/* Sections - All Full Width in Vertical Flow */
+.stability-section,
+.market-section,
+.forecast-section,
+.sentiment-section {
+  width: 100%;
 }
 
-.breakdown-item .value {
-  color: #667eea;
-  font-weight: bold;
-  font-size: 18px;
+/* Ensure cards inside take full height/width transparency */
+.grid-item {
+  width: 100%;
 }
 
-.stat-card .details {
-  font-size: 12px;
-  margin-top: 8px;
-  opacity: 0.8;
+/* Responsive Breakpoints */
+@media (max-width: 992px) {
+  /* Already vertical, just ensure padding/sizing */
 }
 
-.stat-card .change.positive {
-  color: #4caf50;
+/* Footer */
+.dashboard-footer {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.7);
+  padding: 2rem 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: 2rem;
+  font-size: 0.9rem;
 }
-
-.stat-card .change.negative {
-  color: #f44336;
-}
-
-.disclaimer {
-  background: #fff3cd;
-  border-left: 4px solid #ffc107;
-}
-
-.disclaimer h3 {
-  color: #856404;
-}
-
-.disclaimer p {
-  color: #856404;
-  line-height: 1.6;
-}
-
-@media (max-width: 768px) {
-  .page-title {
-    font-size: 24px;
-  }
-  
-  .breakdown-grid {
-    grid-template-columns: 1fr;
-  }
-}
-

@@ -25,7 +25,16 @@ function Sentiment() {
   };
 
   if (loading) {
-    return <div className="loading">Analyzing sentiment...</div>;
+    return (
+      <div className="sentiment-page">
+        <div className="container">
+          <div className="loading-container">
+             <div className="spinner"></div>
+             <div className="loading-text">Processing Economic News...</div>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   if (error) {
@@ -57,7 +66,10 @@ function Sentiment() {
           <h2>Overall Sentiment</h2>
           <div className="sentiment-overview">
             <div className="sentiment-score">
-              <div className="score-value">{sentimentData.sentiment_score.toFixed(1)}%</div>
+              <div className="score-value">
+                {sentimentData.sentiment_score.toFixed(1)}
+                <span className="score-unit"> / 100</span>
+              </div>
               <div className="score-label">Sentiment Score</div>
             </div>
             <div className="sentiment-stats">
@@ -105,22 +117,33 @@ function Sentiment() {
                 </div>
                 <h3 className="article-title">{article.title}</h3>
                 <div className="sentiment-details">
+                  {/* Visual bar only if detailed scores exist */}
+                  {(article.sentiment.positive !== undefined) ? (
                   <div className="sentiment-bar">
                     <div 
                       className="sentiment-fill positive"
-                      style={{ width: `${article.sentiment.positive * 100}%` }}
+                      style={{ width: `${(article.sentiment.positive || 0) * 100}%` }}
                     />
                     <div 
                       className="sentiment-fill neutral"
-                      style={{ width: `${article.sentiment.neutral * 100}%` }}
+                      style={{ width: `${(article.sentiment.neutral || 0) * 100}%` }}
                     />
                     <div 
                       className="sentiment-fill negative"
-                      style={{ width: `${article.sentiment.negative * 100}%` }}
+                      style={{ width: `${(article.sentiment.negative || 0) * 100}%` }}
                     />
                   </div>
+                  ) : (
+                    <div className="sentiment-bar" style={{background: '#eee'}}>
+                        {/* Fallback bar based on label */}
+                         <div 
+                            className={`sentiment-fill ${article.sentiment.label}`}
+                            style={{ width: '100%' }}
+                        />
+                    </div>
+                  )}
                   <div className="sentiment-metrics">
-                    <span>Compound: {article.sentiment.compound.toFixed(3)}</span>
+                    <span>Compound: {article.sentiment.compound ? article.sentiment.compound.toFixed(3) : 'N/A'}</span>
                   </div>
                 </div>
                 {article.link && article.link !== '#' && (
@@ -141,9 +164,10 @@ function Sentiment() {
         <div className="card">
           <h3>Analysis Information</h3>
           <div className="analysis-info">
-            <p><strong>Analyzer:</strong> {sentimentData.analysis_info.analyzer}</p>
-            <p><strong>Total Articles Analyzed:</strong> {sentimentData.analysis_info.total_articles}</p>
-            <p className="note">{sentimentData.analysis_info.note}</p>
+             {/* Fallback if analysis_info is missing, which it appears to be in the current API version */}
+            <p><strong>Analyzer:</strong> {sentimentData.analysis_info?.analyzer || 'VADER Sentiment Analysis'}</p>
+            <p><strong>Total Articles Analyzed:</strong> {sentimentData.aggregate?.total_articles || 0}</p>
+            <p className="note">{sentimentData.analysis_info?.note || 'Sentiment derived from recent economic news headlines.'}</p>
           </div>
         </div>
       </div>

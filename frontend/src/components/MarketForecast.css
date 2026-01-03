@@ -1,0 +1,84 @@
+/* Market Forecast Component */
+.forecast-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.forecast-summary {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  margin-bottom: 15px;
+  padding: 15px;
+  background: #f8fafc;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
+
+.metric {
+  display: flex;
+  flex-direction: column;
+}
+
+.metric .label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.metric .value {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.metric .value.score {
+  color: var(--primary-color);
+}
+
+.summary-text {
+  font-size: 1rem;
+  color: var(--text-dark);
+  margin-bottom: 20px;
+  font-style: italic;
+  padding-left: 10px;
+  border-left: 3px solid var(--accent-color);
+}
+
+.chart-container {
+  flex: 1;
+  min-height: 350px;
+  width: 100%;
+  padding: 10px 0;
+}
+
+/* Check tooltip styling inside Recharts (usually inline JS, but we can target custom class) */
+.custom-tooltip {
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  border-radius: 8px;
+  padding: 12px !important;
+}
+
+.custom-tooltip .label {
+  font-weight: 700;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 4px;
+  margin-bottom: 4px;
+  color: var(--text-dark);
+}
+
+.custom-tooltip .intro {
+  font-size: 0.9rem;
+  margin: 2px 0;
+}
+
+.note {
+  display: block;
+  text-align: right;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 10px;
+}
