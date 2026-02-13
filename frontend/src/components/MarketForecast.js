@@ -26,6 +26,7 @@ const CustomTooltip = ({ active, payload, label }) => {
   return null;
 };
 
+
 const MarketForecast = ({ data, loading, error }) => {
   // Console log before rendering
   if (data) {

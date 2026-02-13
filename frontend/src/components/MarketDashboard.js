@@ -197,6 +197,11 @@ const MarketDashboard = ({ data, loading, error, showDetails = false }) => {
       </div>
       <div className="market-footer">
         Data Sources: NSE, BSE, COMEX via Yahoo Finance • Last Updated: {data.date || new Date().toLocaleDateString()}
+        {data.is_live === false && data.note && (
+          <span style={{ display: 'block', marginTop: '6px', color: '#92400E', fontSize: '0.85rem' }}>
+            {data.note}
+          </span>
+        )}
       </div>
     </div>
   );

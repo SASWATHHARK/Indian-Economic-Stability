@@ -44,6 +44,10 @@ forecaster = MarketForecaster()
 sentiment_analyzer = SentimentAnalyzer()
 stability_calculator = StabilityScoreCalculator()
 
+# Cache for stability score (avoids calling forecast + sentiment again)
+_stability_cache = {"forecast_score": None, "sentiment_score": None, "ts": None}
+CACHE_TTL_SEC = 300  # 5 minutes
+
 # --------------------------------------------------
 # Root Endpoint
 # --------------------------------------------------
@@ -73,11 +77,12 @@ def get_market_data():
     Uses sample data if live fetch fails.
     """
     try:
-        data = data_fetcher.fetch_market_data(period="3mo")
+        # Use 5d for fresher "current" price; fallback to sample if live fails
+        data = data_fetcher.fetch_market_data(period="5d")
         return data
     except Exception:
         return data_fetcher.fetch_market_data(
-            period="3mo",
+            period="5d",
             use_sample=True
         )
 
@@ -124,12 +129,17 @@ def get_forecast():
 
         current_value = float(nifty_df["Close"].iloc[-1])
         forecast_score = normalize_forecast_score(summary, current_value)
+        score_100 = round(forecast_score * 100, 2)
+
+        # Cache for stability endpoint (avoid re-running forecast)
+        _stability_cache["forecast_score"] = score_100
+        _stability_cache["ts"] = datetime.now()
 
         return {
             "status": "success",
             "forecast": forecast_data,
             "summary": summary,
-            "forecast_score": round(forecast_score * 100, 2),
+            "forecast_score": score_100,
             "current_value": round(current_value, 2),
             "model": "Facebook Prophet",
             "note": "Forecast represents market trend, not exact values"
@@ -172,9 +182,14 @@ def get_sentiment():
             for i in range(len(sentiment_results))
         ]
 
+        score_100 = round(sentiment_score * 100, 2)
+        # Cache for stability endpoint (avoid re-running sentiment)
+        _stability_cache["sentiment_score"] = score_100
+        _stability_cache["ts"] = datetime.now()
+
         return {
             "status": "success",
-            "sentiment_score": round(sentiment_score * 100, 2),
+            "sentiment_score": score_100,
             "aggregate": aggregate,
             "articles": articles,
             "analyzer": "VADER"
@@ -193,24 +208,28 @@ def get_stability_score(
     repo_rate: Optional[float] = None
 ):
     """
-    Final Economic Stability Score (0–100)
+    Final Economic Stability Score (0–100).
+    Uses cached forecast/sentiment scores when available so this endpoint stays fast.
     """
     try:
-        # Market Trend Score
-        forecast_data = get_forecast()
-        market_score = forecast_data["forecast_score"] / 100
+        now = datetime.now()
+        cache_ok = (
+            _stability_cache["ts"] is not None
+            and (now - _stability_cache["ts"]).total_seconds() < CACHE_TTL_SEC
+        )
+        if cache_ok and _stability_cache["forecast_score"] is not None and _stability_cache["sentiment_score"] is not None:
+            market_score = _stability_cache["forecast_score"] / 100
+            sentiment_score = _stability_cache["sentiment_score"] / 100
+        else:
+            # Defaults so we never block on forecast/sentiment (avoids 60s+ timeouts)
+            market_score = 0.5
+            sentiment_score = 0.5
 
-        # Sentiment Score
-        sentiment_data = get_sentiment()
-        sentiment_score = sentiment_data["sentiment_score"] / 100
-
-        # Economic Indicators
         economic_score = get_economic_indicators_score(
             inflation_rate,
             repo_rate
         )
 
-        # Final Stability Score
         result = stability_calculator.calculate(
             market_trend_score=market_score,
             sentiment_score=sentiment_score,
@@ -223,7 +242,7 @@ def get_stability_score(
             "category": result["category"],
             "interpretation": result["interpretation"],
             "components": result["components"],
-            "timestamp": datetime.now().isoformat(),
+            "timestamp": now.isoformat(),
             "disclaimer": "Educational project. Not financial advice."
         }
 

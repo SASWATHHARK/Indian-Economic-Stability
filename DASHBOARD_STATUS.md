@@ -124,3 +124,4 @@ After the fix, the Dashboard will:
 **Note:** The application is working correctly. The issue is with external data source (Yahoo Finance) availability, not your code.
 
 
+

@@ -40,8 +40,10 @@ const Dashboard = () => {
         setError(prev => ({ ...prev, [key]: null }));
       } catch (err) {
         console.error(`${key} Error:`, err);
-        // Extract meaningful error message
-        const msg = err.response?.data?.detail || err.message || "Failed to load data";
+        const isTimeout = err.code === 'ECONNABORTED' || err.message?.includes('timeout');
+        const msg = isTimeout
+          ? "Request timed out. Backend may be busy (first load can take a minute). Try refreshing."
+          : (err.response?.data?.detail || err.message || "Failed to load data");
         setError(prev => ({ ...prev, [key]: msg }));
       } finally {
         setLoading(prev => ({ ...prev, [key]: false }));
