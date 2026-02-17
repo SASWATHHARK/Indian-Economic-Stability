@@ -52,11 +52,10 @@ pip install -r ../requirements.txt
 ```
 
 5. Run the backend server:
-```bash
-python main.py
-```
+   - **Legacy (single-file)**: `python main.py`
+   - **Production (modular v2)**: from project root, `cd backend` then `uvicorn app.main:app --reload --host 0.0.0.0 --port 8000`
 
-The API will be available at `http://localhost:8000`
+The API will be available at `http://localhost:8000`. v2 adds database, GET /model-metrics, POST /refresh-data, and multi-factor stability score.
 
 ### Frontend Setup
 
