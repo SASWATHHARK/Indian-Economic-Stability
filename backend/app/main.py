@@ -14,10 +14,29 @@ from app.utils.log import get_logger
 logger = get_logger(__name__)
 
 
+def _prewarm_forecast():
+    """Background: pre-train Prophet so first /forecast request is fast."""
+    if getattr(settings, "FORCE_SAMPLE_DATA", False):
+        return
+    try:
+        from app.routes.forecast import forecaster, _data_fetcher
+        if not _data_fetcher or forecaster.is_trained:
+            return
+        df = _data_fetcher.get_historical_dataframe("^NSEI", "3mo") or _data_fetcher.get_sample_dataframe("3mo")
+        if df is not None and len(df) >= 30:
+            forecaster.train_model(df)
+            logger.info("Forecast model pre-warmed")
+    except Exception as e:
+        logger.debug("Forecast pre-warm skipped: %s", e)
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     init_db()
     logger.info("Database initialized")
+    import threading
+    t = threading.Thread(target=_prewarm_forecast, daemon=True)
+    t.start()
     if settings.SCHEDULER_ENABLED:
         try:
             from apscheduler.schedulers.background import BackgroundScheduler

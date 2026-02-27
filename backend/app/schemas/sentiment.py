@@ -19,6 +19,12 @@ class SentimentResponse(BaseModel):
     articles: List[SentimentArticle]
     analyzer: str = "VADER"
     filters_applied: Optional[dict] = None
+    data_source: Optional[str] = None
+    demo_mode: Optional[bool] = None
+    sample_data_date: Optional[str] = None
+
+    class Config:
+        extra = "allow"
 
 
 class SentimentFilterParams(BaseModel):

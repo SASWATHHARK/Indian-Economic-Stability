@@ -15,8 +15,13 @@ function StabilityGauge({ data, loading, error }) {
   if (error) return <div className="card error">Error: {error}</div>;
   if (!data) return <div className="card no-data">Stability data unavailable</div>;
 
-  // STRICT MAPPING
-  const { stability_score, category, interpretation, components } = data;
+  const { stability_score, category, explanation } = data;
+  const interpretation = data.interpretation || explanation;
+  const components = data.components ? {
+    market_trend: data.components.market_trend ?? data.components.market_momentum,
+    sentiment: data.components.sentiment,
+    economic_indicators: data.components.economic_indicators ?? data.components.volatility_inverse ?? data.components.inflation,
+  } : null;
   
   // Safety check
   if (stability_score === undefined || stability_score === null) {

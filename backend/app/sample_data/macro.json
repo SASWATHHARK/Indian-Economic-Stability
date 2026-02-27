@@ -1,0 +1,33 @@
+{
+  "inflation": {
+    "value": 4.85,
+    "unit": "percent",
+    "trend": "stable",
+    "previous": 4.72
+  },
+  "repo_rate": {
+    "value": 6.50,
+    "unit": "percent",
+    "trend": "stable"
+  },
+  "gdp_growth": {
+    "value": 7.20,
+    "unit": "percent",
+    "trend": "up"
+  },
+  "fii_flow": {
+    "value": 12500,
+    "unit": "Cr INR",
+    "trend": "inflow"
+  },
+  "dii_flow": {
+    "value": 8200,
+    "unit": "Cr INR",
+    "trend": "inflow"
+  },
+  "industrial_production_index": {
+    "value": 142.5,
+    "base": "2011-12",
+    "trend": "up"
+  }
+}

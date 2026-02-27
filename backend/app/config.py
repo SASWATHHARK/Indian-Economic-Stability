@@ -42,6 +42,13 @@ class Settings(BaseSettings):
     # Logging
     LOG_LEVEL: str = "INFO"
 
+    # Offline fallback
+    OFFLINE_FALLBACK_ENABLED: bool = True
+    DEMO_MODE_WHEN_OFFLINE: bool = True
+    SAMPLE_DATA_SEMI_DYNAMIC: bool = False  # ±0.5% random variation on sample
+    # Skip live APIs entirely when True – instant load, no timeouts (set via FORCE_SAMPLE_DATA=1)
+    FORCE_SAMPLE_DATA: bool = False
+
     class Config:
         env_file = ".env"
         env_file_encoding = "utf-8"

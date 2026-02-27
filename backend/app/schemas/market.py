@@ -24,6 +24,9 @@ class MarketDataResponse(BaseModel):
     oil: Optional[MarketDataItem] = None
     inr: Optional[MarketDataItem] = None
     note: Optional[str] = None
+    data_source: Optional[str] = None  # "live" | "offline_sample"
+    demo_mode: Optional[bool] = None
+    sample_data_date: Optional[str] = None  # e.g. "2025-02-20 14:30 IST" when demo
 
     class Config:
         extra = "allow"

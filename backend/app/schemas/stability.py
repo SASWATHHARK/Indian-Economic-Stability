@@ -20,3 +20,7 @@ class StabilityResponse(BaseModel):
     breakdown: Optional[dict] = None
     timestamp: str
     disclaimer: Optional[str] = None
+    data_source: Optional[str] = None
+    demo_mode: Optional[bool] = None
+    sample_data_date: Optional[str] = None    class Config:
+        extra = "allow"

@@ -3,6 +3,14 @@
   min-height: 80vh;
 }
 
+.economics-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
 .economics-page .page-subtitle {
   color: var(--text-muted);
   font-size: 1.1rem;
@@ -29,3 +37,38 @@
 .indicator-list strong {
   color: var(--brand-primary);
 }
+
+.economics-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.economics-badge-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+}
+
+.economics-badge.live {
+  background-color: #dcfce7;
+  color: #166534;
+}
+
+.economics-badge.live .economics-badge-dot {
+  background-color: #16a34a;
+}
+
+.economics-badge.simulated {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+.economics-badge.simulated .economics-badge-dot {
+  background-color: #f59e0b;
+}
+

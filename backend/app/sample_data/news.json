@@ -1,0 +1,62 @@
+[
+  {
+    "headline": "RBI keeps repo rate unchanged at 6.5%, signals stable monetary policy",
+    "sentiment": "positive",
+    "compound_score": 0.42,
+    "confidence": 0.88
+  },
+  {
+    "headline": "India GDP growth beats estimates at 7.2% in Q3",
+    "sentiment": "positive",
+    "compound_score": 0.65,
+    "confidence": 0.92
+  },
+  {
+    "headline": "FII inflows cross Rs 12,000 cr in February as markets rally",
+    "sentiment": "positive",
+    "compound_score": 0.55,
+    "confidence": 0.85
+  },
+  {
+    "headline": "Inflation eases to 4.85%, within RBI comfort band",
+    "sentiment": "positive",
+    "compound_score": 0.38,
+    "confidence": 0.90
+  },
+  {
+    "headline": "Nifty 50 hits fresh high on strong earnings, global cues",
+    "sentiment": "positive",
+    "compound_score": 0.52,
+    "confidence": 0.87
+  },
+  {
+    "headline": "Crude oil volatility may pressure current account deficit",
+    "sentiment": "negative",
+    "compound_score": -0.35,
+    "confidence": 0.82
+  },
+  {
+    "headline": "Rupee weakens against dollar amid global risk-off sentiment",
+    "sentiment": "negative",
+    "compound_score": -0.28,
+    "confidence": 0.79
+  },
+  {
+    "headline": "Manufacturing PMI dips in January on demand concerns",
+    "sentiment": "neutral",
+    "compound_score": -0.05,
+    "confidence": 0.75
+  },
+  {
+    "headline": "SEBI tightens norms for mid-cap fund exposure",
+    "sentiment": "neutral",
+    "compound_score": 0.02,
+    "confidence": 0.80
+  },
+  {
+    "headline": "Budget 2025: Infrastructure allocation raised by 12%",
+    "sentiment": "positive",
+    "compound_score": 0.48,
+    "confidence": 0.91
+  }
+]

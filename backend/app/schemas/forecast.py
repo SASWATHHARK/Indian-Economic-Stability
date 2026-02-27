@@ -18,10 +18,15 @@ class ForecastResponse(BaseModel):
     current_value: Optional[float] = None
     model: str = "Facebook Prophet"
     note: Optional[str] = None
-    # Probabilistic output (academic requirement)
     uptrend_probability: Optional[float] = None
     downtrend_probability: Optional[float] = None
     confidence_level: Optional[str] = None
+    data_source: Optional[str] = None
+    demo_mode: Optional[bool] = None
+    sample_data_date: Optional[str] = None
+
+    class Config:
+        extra = "allow"
 
 
 class ModelMetricsResponse(BaseModel):

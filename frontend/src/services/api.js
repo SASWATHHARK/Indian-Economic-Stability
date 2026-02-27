@@ -5,7 +5,7 @@ const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://127.0.0.1:8000';
 const api = axios.create({
   baseURL: API_BASE_URL,
   headers: { 'Content-Type': 'application/json' },
-  timeout: 60000,
+  timeout: 120000,  // 2 min – first load (Prophet training, yfinance) can take 60–90s
 });
 
 api.interceptors.response.use(

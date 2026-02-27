@@ -1,0 +1,17 @@
+{
+  "forecast_trend": "upward",
+  "model_accuracy": 0.78,
+  "current_value": 25850,
+  "forecast": [
+    { "date": "2025-02-18", "predicted": 22185.20, "upper": 22320.00, "lower": 22050.00, "confidence": 0.76 },
+    { "date": "2025-02-19", "predicted": 22220.50, "upper": 22365.00, "lower": 22076.00, "confidence": 0.75 },
+    { "date": "2025-02-20", "predicted": 22255.80, "upper": 22410.00, "lower": 22102.00, "confidence": 0.74 },
+    { "date": "2025-02-21", "predicted": 22290.40, "upper": 22455.00, "lower": 22126.00, "confidence": 0.73 },
+    { "date": "2025-02-22", "predicted": 22325.60, "upper": 22500.00, "lower": 22151.00, "confidence": 0.72 },
+    { "date": "2025-02-23", "predicted": 22360.20, "upper": 22545.00, "lower": 22176.00, "confidence": 0.71 },
+    { "date": "2025-02-24", "predicted": 22395.00, "upper": 22590.00, "lower": 22200.00, "confidence": 0.70 }
+  ],
+  "uptrend_probability": 62.0,
+  "downtrend_probability": 38.0,
+  "confidence_level": "Medium"
+}

@@ -34,21 +34,37 @@ const MarketForecast = ({ data, loading, error }) => {
   }
 
   if (loading) return <div className="card loading">Loading Forecast...</div>;
-  if (error) return <div className="card error">Error: {error}</div>;
-  
+  // For dashboard card we never hard‑fail: fallback to simulated forecast
+  // should already be handled in the service. We simply omit the error banner
+  // and rely on the note + badge to indicate offline mode.
+
   if (!data || !data.forecast || data.forecast.length === 0) {
-    return <div className="card no-data">No forecast data available</div>;
+    return (
+      <div className="card no-data">
+        Using Simulated Forecast (Offline Mode)
+      </div>
+    );
   }
 
-  const { forecast, current_value, forecast_score, summary, note } = data;
+  const { forecast, current_value, forecast_score, summary, note, simulated } = data;
 
   const currentVal = current_value !== undefined ? current_value : '--';
   const score = forecast_score !== undefined ? forecast_score : '--';
   const summaryTrend = summary?.trend || "Forecast created";
 
+  const isSimulated = simulated === true;
+
   return (
     <div className="card forecast-card">
-      <h3 className="card-title">7-Day Market Forecast (NIFTY 50)</h3>
+      <div className="forecast-card-header">
+        <h3 className="card-title">7-Day Market Forecast (NIFTY 50)</h3>
+        <div
+          className={`forecast-badge ${isSimulated ? 'simulated' : 'live'}`}
+        >
+          <span className="forecast-badge-dot" />
+          {isSimulated ? 'Simulated (Market-Aligned)' : 'Live Market Data'}
+        </div>
+      </div>
       
       <div className="forecast-summary">
         <div className="metric">
@@ -77,7 +93,11 @@ const MarketForecast = ({ data, loading, error }) => {
           </LineChart>
         </ResponsiveContainer>
       </div>
-      <small className="note">{note || "AI-generated prediction"}</small>
+      <small className="note">
+        {note || (isSimulated
+          ? "Using Simulated Forecast (Offline Mode)"
+          : "AI-generated prediction")}
+      </small>
     </div>
   );
 };

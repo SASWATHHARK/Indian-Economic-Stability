@@ -87,7 +87,15 @@ def market_latest(db: Session = Depends(get_db)):
         fetch_and_store_market_data(db)
         data = get_latest_market(db)
     if not data:
-        raise HTTPException(status_code=503, detail="No market data available")
+        # Fallback so UI has data when DB empty and sample dataset not loaded
+        minimal = _minimal_market_data()
+        return MarketLatestResponse(
+            status="success",
+            nifty=minimal["nifty"],
+            sensex=minimal["sensex"],
+            last_updated=minimal["date"],
+            source="sample",
+        )
     return MarketLatestResponse(
         status="success",
         nifty=data["nifty"],
@@ -186,6 +194,24 @@ def health():
     return {"status": "healthy"}
 
 
+def _minimal_market_data():
+    """Fallback when DB has no market data and sample dataset is not loaded."""
+    from datetime import datetime
+    date_str = datetime.now().strftime("%Y-%m-%d")
+    def _mk(close, open_, high, low, ch, pct):
+        return {"current": close, "open": open_, "high": high, "low": low, "volume": 250_000_000, "volatility": 0.95, "change": round(ch, 2), "change_percent": round(pct, 2)}
+    nifty_c, nifty_ch = 24500.0, 120.0
+    sensex_c, sensex_ch = 80500.0, 380.0
+    return {
+        "status": "success",
+        "is_live": False,
+        "date": date_str,
+        "nifty": _mk(nifty_c, nifty_c - nifty_ch, nifty_c + 60, nifty_c - 60, nifty_ch, 0.49),
+        "sensex": _mk(sensex_c, sensex_c - sensex_ch, sensex_c + 190, sensex_c - 190, sensex_ch, 0.47),
+        "note": "Offline sample data (database empty or API unavailable)",
+    }
+
+
 # Backward-compatible aliases
 @app.get("/market-data")
 def market_data_legacy(db: Session = Depends(get_db)):
@@ -194,7 +220,8 @@ def market_data_legacy(db: Session = Depends(get_db)):
         fetch_and_store_market_data(db)
         data = get_latest_market(db)
     if not data:
-        raise HTTPException(status_code=503, detail="No market data")
+        # Return minimal sample data so UI always has something to show
+        return _minimal_market_data()
     def _mk(m):
         ch = (m["close"] - m["open"]) if m.get("open") else 0
         pct = (ch / m["open"] * 100) if m.get("open") else 0

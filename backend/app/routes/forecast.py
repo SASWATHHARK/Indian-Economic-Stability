@@ -1,70 +1,48 @@
 from fastapi import APIRouter, HTTPException
+from app.services import data_router
 from app.services import DataFetcher
 from app.ml.forecast import ForecastService, get_model_metrics
 from app.schemas.forecast import ForecastResponse, ModelMetricsResponse
-from app.utils.stability_cache import update_stability_cache
 
 router = APIRouter()
-data_fetcher = DataFetcher()
+_data_fetcher = DataFetcher() if DataFetcher else None
 forecaster = ForecastService()
 
 @router.get("/forecast", response_model=ForecastResponse)
 def get_forecast():
     try:
-        try:
-            nifty_df = data_fetcher.get_historical_dataframe("^NSEI", "3mo")
-        except Exception:
-            nifty_df = data_fetcher.get_sample_dataframe("3mo")
-        if nifty_df.empty or len(nifty_df) < 30:
-            nifty_df = data_fetcher.get_sample_dataframe("3mo")
-
-        if not forecaster.is_trained:
-            ok, msg = forecaster.train_model(nifty_df)
-            if not ok:
-                raise HTTPException(status_code=500, detail=msg)
-
-        forecast_df = forecaster.forecast(days=7)
-        summary = forecaster.get_forecast_summary(forecast_df)
-        current_value = float(nifty_df["Close"].iloc[-1])
-
-        forecast_data = [
-            {
-                "date": row["ds"].strftime("%Y-%m-%d"),
-                "predicted": round(float(row["yhat"]), 2),
-                "upper": round(float(row["yhat_upper"]), 2),
-                "lower": round(float(row["yhat_lower"]), 2),
-                "confidence": round(float(row["confidence"]), 2),
-            }
-            for _, row in forecast_df.iterrows()
-        ]
-        up_prob, down_prob = forecaster.get_uptrend_downtrend_probability(forecast_df)
-        conf_level = forecaster.get_confidence_level()
-        vol = nifty_df["Close"].pct_change().std() * 100 if len(nifty_df) > 1 else None
-        update_stability_cache(up_prob, 50.0, vol)
-
+        payload = data_router.get_forecast(
+            data_fetcher=_data_fetcher,
+            forecaster=forecaster,
+        )
         return ForecastResponse(
-            status="success",
-            forecast=forecast_data,
-            summary=summary,
-            forecast_score=round((up_prob / 100.0) * 100, 2),
-            current_value=round(current_value, 2),
-            model="Facebook Prophet",
-            note="Forecast represents market trend, not exact values.",
-            uptrend_probability=up_prob,
-            downtrend_probability=down_prob,
-            confidence_level=conf_level,
+            status=payload.get("status", "success"),
+            forecast=payload["forecast"],
+            summary=payload.get("summary"),
+            forecast_score=payload.get("forecast_score"),
+            current_value=payload.get("current_value"),
+            model=payload.get("model", "Facebook Prophet"),
+            note=payload.get("note"),
+            uptrend_probability=payload.get("uptrend_probability"),
+            downtrend_probability=payload.get("downtrend_probability"),
+            confidence_level=payload.get("confidence_level"),
+            data_source=payload.get("data_source"),
+            demo_mode=payload.get("demo_mode"),
+            sample_data_date=payload.get("sample_data_date"),
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("/model-metrics", response_model=ModelMetricsResponse)
 def model_metrics():
-    if not forecaster.is_trained:
+    if not forecaster.is_trained and _data_fetcher:
         try:
-            nifty_df = data_fetcher.get_historical_dataframe("^NSEI", "3mo")
-            if nifty_df.empty or len(nifty_df) < 30:
-                nifty_df = data_fetcher.get_sample_dataframe("3mo")
-            forecaster.train_model(nifty_df)
+            nifty_df = _data_fetcher.get_historical_dataframe("^NSEI", "3mo")
+            if nifty_df is not None and not nifty_df.empty and len(nifty_df) >= 30:
+                forecaster.train_model(nifty_df)
+            else:
+                nifty_df = _data_fetcher.get_sample_dataframe("3mo")
+                forecaster.train_model(nifty_df)
         except Exception:
             pass
     m = get_model_metrics(forecaster)

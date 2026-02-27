@@ -1,0 +1,14 @@
+{
+  "stability_score": 68.5,
+  "classification": "Moderately Stable",
+  "factors": {
+    "market_momentum": 72.0,
+    "sentiment": 65.0,
+    "volatility_inverse": 62.0,
+    "inflation": 70.0,
+    "liquidity": 65.0
+  },
+  "confidence": 0.82,
+  "risk_level": "Medium",
+  "explanation": "Moderately Stable: Positive sentiment and supportive market momentum, with moderate volatility."
+}
